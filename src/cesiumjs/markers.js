@@ -1,5 +1,4 @@
 import { Viewer } from 'cesium'
-import { meteorites } from './meteorites'
 
 /**
  * Markers for my meteorite impacts created through nominatim API with geolocation (Long, lat).
