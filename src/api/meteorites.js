@@ -1,5 +1,7 @@
 /**
- *
+ * Fethes meteorite data from NASA API and filters out meteorites without geolocation (long and lat).
+ * 
+ * @returns {Array} Array of meteorites with geolocation data.
  */
 export async function fetchMeteorites() {
   // TODO: hämta data från NASA API
