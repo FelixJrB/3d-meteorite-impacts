@@ -6,5 +6,16 @@ export async function fetchMeteorites() {
   // glöm inte meteoriter som brinner upp i atmosfären
   // long och lat med nomination för geolocation.
 
-  const APIresponse = await fetch('')
+  const meteoriteData = await fetch('/api/meteorites')
+  const jsonData = await meteoriteData.json()
+
+  console.log(jsonData[169])
+
+  const filteredMeteorites = jsonData.filter(m => m.reclat && m.reclong)
+
+  return filteredMeteorites
+
+
+
+  // const APIresponse = await fetch('')
 }
