@@ -1,41 +1,41 @@
 import express from 'express'
+import { readFile } from 'fs/promises'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
 import { connectToMongoDB } from './src/config/mongoose.js'
 
 
-// await connectToMongoDB(process.env.DATABASE_URL || 'mongodb://localhost:27017/meteorite-impacts')
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+await connectToMongoDB(process.env.DATABASE_URL || 'mongodb://localhost:27017/meteorite-impacts')
+
 
 const app = express()
 const PORT = process.env.PORT || 3000
 
-app.use(express.json({ limit: '500kb'}))
+app.use(express.json())
 
-// app.get('/api/meteorites', async (req, res) => {
-//   const response = await fetch('https://data.nasa.gov/docs/legacy/meteorite_landings/Meteorite_Landings.json', {
-//     redirect: 'follow',
-//     headers: {
-//       'User-Agent': 'Mozilla/5.0'
-//     }
-//   })
-//   const data = await response.json()
-//   res.json(data)
-// })
 
-app.get('/api/meteorites', async (req, res) => {
-  const limit = 1000
-  let offset = 0
-  let all = []
-  let batch
 
-  do {
+app.get('/api/meteorites', async (_req, res) => {
+  let all
+
+  try {
     const response = await fetch(
-      `https://data.nasa.gov/docs/legacy/meteorite_landings/Meteorite_Landings.json?$limit=${limit}&$offset=${offset}`,
+      'https://data.nasa.gov/docs/legacy/meteorite_landings/Meteorite_Landings.json',
       { redirect: 'follow', headers: { 'User-Agent': 'Mozilla/5.0' } }
     )
     const json = await response.json()
-    batch = json.data || []
-    all = all.concat(batch)
-    offset += limit
-  } while (batch.length === limit)
+    all = json.data || []
+  } catch {
+    all = []
+  }
+
+  if (all.length < 10000) {
+    const filePath = join(__dirname, 'src/meteoriteDataBackup/meteorite_landings.json')
+    const fileContent = await readFile(filePath, 'utf-8')
+    all = JSON.parse(fileContent).data || []
+  }
 
   const meteorites = all
     .filter(m => m[15] && m[16])
@@ -46,7 +46,7 @@ app.get('/api/meteorites', async (req, res) => {
       fall: m[13],
       year: m[14],
       reclat: parseFloat(m[15]),
-      reclong: parseFloat(m[16])
+      reclong: parseFloat(m[16]),
     }))
 
   res.json(meteorites)
