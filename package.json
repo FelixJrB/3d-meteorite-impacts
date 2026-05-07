@@ -15,6 +15,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "bootstrap": "^5.3.8",
     "cesium": "^1.140.0",
     "express": "^5.2.1",
     "mongoose": "^9.4.1"
