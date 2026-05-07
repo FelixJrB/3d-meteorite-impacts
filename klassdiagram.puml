@@ -1,0 +1,26 @@
+@startuml 3D meteorite impacts vizualization
+class MeteoriteAPI {
+  +fetchMeteorites() : Promise<Array>
+}
+
+class NominatimAPI {
+  +reverseGeocode(lat: number, lon: number) : Promise<string>
+}
+
+class Markers {
+  +addMarkers(viewer: Viewer, meteorites: Array) : void
+}
+
+class Viewer {
+  +initViewer() : Viewer
+}
+
+class Server {
+  +GET /api/meteorites : Array
+}
+
+MeteoriteAPI --> Server : fetch /api/meteorites
+Markers --> MeteoriteAPI : uses meteorite data
+Markers --> NominatimAPI : reverse geocode on click
+Markers --> Viewer : adds entities
+@enduml
