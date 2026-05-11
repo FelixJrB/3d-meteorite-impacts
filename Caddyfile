@@ -1,7 +1,3 @@
-{
-    local_certs
-}
-
 # Snippet for reusable TLS configuration
 (lnu_tls) {
     tls {
