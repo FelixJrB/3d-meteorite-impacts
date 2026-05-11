@@ -7,7 +7,7 @@ COPY package.json package-lock.json ./
 FROM base AS development
 RUN npm install
 COPY . .
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "node server.js & npm run dev"]
 
 # ---- Dependencies Stage ----
 FROM base AS deps

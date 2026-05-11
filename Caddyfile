@@ -12,7 +12,7 @@
 
 {$SITE_ADDRESS:localhost} {
     import lnu_tls
-    reverse_proxy server:3000
+    reverse_proxy server:{$APP_PORT:3000}
 
     log {
         output stdout
