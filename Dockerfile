@@ -15,6 +15,7 @@ RUN npm install --package-lock-only && npm ci --omit=dev --ignore-scripts
 
 # ---- Builder Stage ----
 FROM base AS builder
+ARG VITE_CESIUM_TOKEN
 RUN npm install --package-lock-only && npm ci
 COPY . .
 RUN npm run build
