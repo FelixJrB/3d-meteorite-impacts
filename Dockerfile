@@ -1,5 +1,5 @@
 # ---- Base stage (common) ----
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 WORKDIR /app
 COPY package.json package-lock.json ./
 
@@ -11,16 +11,16 @@ CMD ["npm", "run", "dev"]
 
 # ---- Dependencies Stage ----
 FROM base AS deps
-RUN npm ci --omit=dev --ignore-scripts
+RUN npm install --package-lock-only && npm ci --omit=dev --ignore-scripts
 
 # ---- Builder Stage ----
 FROM base AS builder
-RUN npm ci
+RUN npm install --package-lock-only && npm ci
 COPY . .
 RUN npm run build
 
 # ---- Production Stage ----
-FROM node:22-alpine AS production
+FROM node:24-alpine AS production
 WORKDIR /app
 COPY --from=deps --chown=node:node /app/node_modules ./node_modules
 COPY --from=builder --chown=node:node /app/dist ./dist
