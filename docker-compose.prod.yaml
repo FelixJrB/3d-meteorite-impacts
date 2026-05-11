@@ -1,0 +1,8 @@
+name: 3D-meteorite-impacts
+
+services:
+  server:
+    build:
+      target: production
+
+  

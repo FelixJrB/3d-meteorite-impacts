@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 3000
 
 // Middleware, transform raw text into json
 app.use(express.json())
+app.use(express.static('dist'))
 
 
 

@@ -1,0 +1,9 @@
+{
+    acme_ca https://ca.camp.lnu.se:9000/acme/acme/directory
+    acme_ca_root /etc/ssl/certs/LNU_FTK_Campus_Root_CA_2025.crt
+}
+
+cu3049.camp.lnu.se {
+
+        reverse_proxy server:3000
+    }

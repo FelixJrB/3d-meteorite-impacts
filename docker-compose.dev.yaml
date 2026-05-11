@@ -1,0 +1,20 @@
+name: 3D-meteorite-impacts
+
+services:
+  db:
+    image: mongo:8.2.4
+    ports:
+      - '27017:27017'
+
+  server:
+    build:
+      target: development
+    ports:
+      - '${PORT:-3000}:${PORT:-3000}'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - APPLICATION_NAME=${APPLICATION_NAME:-Dockerized Meteorite Impacts}
+

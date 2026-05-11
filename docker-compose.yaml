@@ -1,0 +1,36 @@
+services:
+
+  db:
+    image: mongo:8.2.4
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  server:
+    build:
+      context: .
+    environment:
+      - DB_CONNECTION_STRING=mongodb://db:27017/meteorites
+      - PORT=${PORT:-3000}
+      - VITE_CESIUM_TOKEN=${VITE_CESIUM_TOKEN}
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    dns:
+      - 172.25.8.8
+      - 172.25.8.88
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - ./certs/LNU_FTK_Campus_Root_CA_2025.crt:/etc/ssl/certs/LNU_FTK_Campus_Root_CA_2025.crt:ro
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+  caddy_data:
