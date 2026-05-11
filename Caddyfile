@@ -5,12 +5,12 @@
 # Snippet for reusable TLS configuration
 (lnu_tls) {
     tls {
-        issuer internal
-
         issuer acme {
             dir https://ca.camp.lnu.se:9000/acme/acme/directory
             trusted_roots /etc/ssl/certs/LNU_FTK_Campus_Root_CA_2025.crt
         }
+
+        issuer internal
     }
 }
 
