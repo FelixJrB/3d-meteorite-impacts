@@ -14,7 +14,6 @@ services:
     environment:
       - DB_CONNECTION_STRING=mongodb://db:27017/meteorites
       - PORT=${PORT:-3000}
-      - VITE_CESIUM_TOKEN=${VITE_CESIUM_TOKEN}
     depends_on:
       - db
     restart: unless-stopped
