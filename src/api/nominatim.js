@@ -11,6 +11,7 @@
 export async function geocodeLocation(reclong, reclat) {
   const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${reclat}&lon=${reclong}`)
   const data = await response.json()
+  console.log('Geocoded location data:', data)
   return data
 }
 
