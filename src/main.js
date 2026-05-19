@@ -29,7 +29,10 @@ async function startApp() {
     const allMeteorites = await fetchMeteorites()
     addMarkers(viewer, allMeteorites)
     // Set up the sidebar with event listeners for filtering meteorites by mass
-    sideBar(viewer, allMeteorites)
+    meteoriteMass(viewer, allMeteorites)
+    yearFilter(viewer, allMeteorites)
+    locationFilter(viewer, allMeteorites)
+    resetFilters(viewer, allMeteorites)
 
     viewer.selectedEntityChanged.addEventListener(async () => {
       const entity = viewer.selectedEntity
@@ -43,8 +46,6 @@ async function startApp() {
           const address = locationData.display_name
           console.log('Found location:', locationData.display_name)
           console.log('Found the following location:', address)
-
-
           // Update the description of the selected entity with the fetched address, 
           // replacing the placeholder text "Fetching location..." with the actual address
           // Cesium constraints require us to use .getValue() to get the current description value
@@ -53,8 +54,6 @@ async function startApp() {
           const currentHtml = entity.description.getValue()
           const updatedHtml = currentHtml.replace('Fetching location...', address)
           entity.description = updatedHtml
-
-
         } catch (err) {
           console.error('Could not fetch location:', err)
           const currentHtml = entity.description.getValue()
@@ -69,39 +68,113 @@ async function startApp() {
 }
 
 /**
- * Sets up the sidebar with event listeners for filtering meteorites by class.
- * When a radio button is selected, the markers on the map are updated to show only the meteorites of the selected class.
- * The filtering is done by mass, with predefined categories for small, medium, large, and enormous meteorites. 
+ * Resets all filters in the sidebar to their default state and updates the markers on the map to show all meteorites.
+ * This function is called when the "Reset filters" button is clicked. It unchecks all mass filter radio buttons, clears the year from/to inputs, and clears the location search input.
+ * After resetting the filters, it calls addMarkers to update the map with all meteorites.
  *
- * @param {import('cesium').Viewer} viewer - Cesium viewer instance to update the markers on the map.
- * @param {Array<object>} data - Array of meteorite data to filter and display on the map.
+ * @param {import('cesium').Viewer} viewer - Cesium viewer instance.
+ * @param {Array<object>} data - Array of all meteorite data.
+ * @returns {void}
+ * @see https://getbootstrap.com/docs/5.0/forms/checks-radios/#radios
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/checked
  */
-function sideBar(viewer, data) {
-  const radioButtons = document.querySelectorAll('input[name="mass"]')
-
-  radioButtons.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-      const selectedSize = e.target.value
-      console.log('filter by size:', selectedSize)
-
-      // Filter the meteorites based on the selected size category
-      // turns it into a number
-      const filteredMeteorites = data.filter(m => {
-        const mass = parseFloat(m.mass) || 0
-
-        if (selectedSize === 'all') return true
-        if (selectedSize === 'small') return mass < 250
-        if (selectedSize === 'medium') return mass >= 250 && mass < 5000
-        if (selectedSize === 'large') return mass >= 5000 && mass < 100000
-        if (selectedSize === 'enormous') return mass >= 100000
-
-        return true
-      })
-
-      // Update the markers on the map with the filtered meteorites
-      addMarkers(viewer, filteredMeteorites)
-    })
+function resetFilters(viewer, data) {
+  document.getElementById('resetFilters').addEventListener('click', () => {
+    document.querySelectorAll('input[name="mass"]').forEach(r => r.checked = false)
+    document.getElementById('yearFrom').value = ''
+    document.getElementById('yearTo').value = ''
+    document.getElementById('searchlocation').value = ''
+    addMarkers(viewer, data)
   })
+}
+/**
+ * Sets up event listeners for mass filter radio buttons.
+ * When a radio button is selected, applyFilters is called to update the markers.
+ *
+ * @param {import('cesium').Viewer} viewer - Cesium viewer instance.
+ * @param {Array<object>} data - Array of all meteorite data.
+ */
+function meteoriteMass(viewer, data) {
+  document.querySelectorAll('input[name="mass"]').forEach(radio => {
+    radio.addEventListener('change', () => applyFilters(viewer, data))
+  })
+}
+
+/**
+ * Sets up event listeners for the year from/to inputs.
+ * When either input changes, applyFilters is called to update the markers.
+ *
+ * @param {import('cesium').Viewer} viewer - Cesium viewer instance.
+ * @param {Array<object>} data - Array of all meteorite data.
+ */
+function yearFilter(viewer, data) {
+  /**
+   * Helper function to apply filters when the "Apply" button is clicked or when Enter is pressed in the year input fields.
+   * This function calls applyFilters to update the markers based on the current filter values.
+   *
+   * @returns {void}
+   */
+  const apply = () => applyFilters(viewer, data)
+
+  document.getElementById('applyYear').addEventListener('click', apply)
+
+  document.getElementById('yearFrom').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') apply()
+  })
+  document.getElementById('yearTo').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') apply()
+  })
+}
+
+/**
+ * Sets up event listener for the location search input.
+ * When the input changes, applyFilters is called to update the markers.
+ *
+ * @param {import('cesium').Viewer} viewer - Cesium viewer instance.
+ * @param {Array<object>} data - Array of all meteorite data.
+ */
+function locationFilter(viewer, data) {
+
+  document.getElementById('applyLocation').addEventListener('click', () => applyFilters(viewer, data))
+  document.getElementById('searchlocation').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') applyFilters(viewer, data)
+  })
+}
+
+/**
+ * Filters meteorite data based on current sidebar state (mass, year, location)
+ * and updates the markers on the map.
+ *
+ * @param {import('cesium').Viewer} viewer - Cesium viewer instance.
+ * @param {Array<object>} data - Array of all meteorite data.
+ */
+function applyFilters(viewer, data) {
+  const selectedSize = document.querySelector('input[name="mass"]:checked')?.value ?? 'all'
+  const from = parseInt(document.getElementById('yearFrom').value) || null
+  const to = parseInt(document.getElementById('yearTo').value) || null
+  const location = document.getElementById('searchlocation').value.toLowerCase().trim()
+
+  console.log('selectedSize:', selectedSize, '| from:', from, '| to:', to, '| location:', location)
+
+  const filtered = data.filter(m => {
+    const mass = parseFloat(m.mass) || 0
+    const year = m.year ? new Date(m.year).getFullYear() : null
+
+    if (selectedSize === 'small' && mass >= 250) return false
+    if (selectedSize === 'medium' && (mass < 250 || mass >= 5000)) return false
+    if (selectedSize === 'large' && (mass < 5000 || mass >= 100000)) return false
+    if (selectedSize === 'enormous' && mass < 100000) return false
+    if (from !== null && year !== null && year < from) return false
+    if (to !== null && year !== null && year > to) return false
+    if (location && !m.name.toLowerCase().includes(location)) return false
+
+    return true
+  })
+
+  // Update the markers on the map with the filtered meteorites
+  addMarkers(viewer, filtered)
+
 }
 
 
