@@ -1,0 +1,13 @@
+name: 3D-meteorite-impacts
+
+services:
+  caddy:
+    environment:
+      - SITE_ADDRESS=cu3049.camp.lnu.se
+    volumes:
+      - ./certs/LNU_FTK_Campus_Root_CA_2025.crt:/etc/ssl/certs/LNU_FTK_Campus_Root_CA_2025.crt:ro
+  server:
+    build:
+      target: production
+
+  

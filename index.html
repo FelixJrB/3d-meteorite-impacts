@@ -1,12 +1,66 @@
 <!DOCTYPE html>
 <html lang="sv">
-  <head>
-    <script type="module" src="/src/main.js"></script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>3D Meteorite Impacts</title>
-  </head>
-  <body>
+
+<head>
+  <script type="module" src="/src/main.js"></script>
+  <link rel="stylesheet" href="/src/styles/cesiumContainer.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Earth Meteorite Impacts</title>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="sidebar bg-dark text-light p-4 border-end border-secondary h-100">
+      <button type="button" class="btn-close btn-close-white" aria-label="Close"></button>
+      <h1 class="fw-bold text-center h5">3D Earth Meteorite Impacts</h1>
+      <label class="small mt-2 d-block">Filters:</label>
+
+      <label class="form-label mt-3">Meteorite Mass</label>
+      <div class="btn-group w-100 mt-2" role="group" aria-label="Mass filter">
+        <input type="radio" class="btn-check" name="mass" id="small" value="small">
+        <label class="btn btn-outline-light" for="small">Small</label>
+        <input type="radio" class="btn-check" name="mass" id="medium" value="medium">
+        <label class="btn btn-outline-light" for="medium">Medium</label>
+        <input type="radio" class="btn-check" name="mass" id="large" value="large">
+        <label class="btn btn-outline-light" for="large">Large</label>
+        <input type="radio" class="btn-check" name="mass" id="enormous" value="enormous">
+        <label class="btn btn-outline-light" for="enormous">Enormous</label>
+      </div>
+
+      <label class="form-label mt-3">Type</label>
+      <div class="btn-group w-100 mt-2" role="group" aria-label="Type filter">
+        <input type="radio" class="btn-check" name="type" id="stony" value="stony">
+        <label class="btn btn-outline-light" for="stony">stony</label>
+        <input type="radio" class="btn-check" name="type" id="iron" value="iron">
+        <label class="btn btn-outline-light" for="iron">iron</label>
+        <input type="radio" class="btn-check" name="type" id="stony-iron" value="stony-iron">
+        <label class="btn btn-outline-light" for="stony-iron">stony-iron</label>
+        <input type="radio" class="btn-check" name="type" id="pallasite" value="pallasite">
+        <label class="btn btn-outline-light" for="pallasite">pallasite</label>
+        <input type="radio" class="btn-check" name="type" id="carbonaceous" value="carbonaceous">
+        <label class="btn btn-outline-light" for="carbonaceous">carbonaceous</label>
+      </div>
+
+      <label class="form-label mt-3" for="yearFrom">Year</label>
+      <div class="d-flex gap-2">
+        <input type="number" class="form-control" placeholder="From" min="1800" max="2024" id="yearFrom">
+        <input type="number" class="form-control" placeholder="To" min="1800" max="2024" id="yearTo">
+      </div>
+
+      <label class="form-label mt-3" for="searchlocation">Location</label>
+      <input type="text" class="form-control" placeholder="Search location..." id="searchlocation">
+
+    </div>
+
     <div id="cesiumContainer"></div>
-  </body>
+  </div>
+</body>
+
 </html>
+
+<!-- Link for wrapper for bootstrap, 
+ @see https://www.youtube.com/watch?v=MdeCwwgAxHU
+ @see https://getbootstrap.com/docs/5.3/components/placeholders/#about
+ -->

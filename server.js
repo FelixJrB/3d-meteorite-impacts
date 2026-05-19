@@ -2,18 +2,21 @@ import express from 'express'
 import { readFile } from 'fs/promises'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
-import { connectToMongoDB } from './src/config/mongoose.js'
+// import { connectToMongoDB } from './src/config/mongoose.js'
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-await connectToMongoDB(process.env.DATABASE_URL || 'mongodb://localhost:27017/meteorite-impacts')
+// Connect to MongoDB - might not need, will think about it
+// await connectToMongoDB(process.env.DATABASE_URL || 'mongodb://localhost:27017/meteorite-impacts')
 
 
 const app = express()
 const PORT = process.env.PORT || 3000
 
+// Middleware, transform raw text into json
 app.use(express.json())
+app.use(express.static('dist'))
 
 
 
@@ -38,7 +41,7 @@ app.get('/api/meteorites', async (_req, res) => {
   }
 
   const meteorites = all
-    .filter(m => m[15] && m[16])
+    .filter(m => m[14] && m[15] && m[16])
     .map(m => ({
       name: m[8],
       recclass: m[11],
@@ -52,6 +55,7 @@ app.get('/api/meteorites', async (_req, res) => {
   res.json(meteorites)
 })
 
+// Error handling middleware
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500).json({
     status_code: err.status || 500,
@@ -59,6 +63,7 @@ app.use((err, _req, res, _next) => {
   })
 })
 
+// Listens for a specific port and then tells me with a message the Port (3000)
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`)
 })

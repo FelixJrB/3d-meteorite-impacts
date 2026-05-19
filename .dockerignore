@@ -1,0 +1,14 @@
+# Exclude all files by default
+*
+
+
+# Allow configuration files
+!package.json
+!package-lock.json
+
+# Allow source code and public assets
+!src/
+!public/
+!index.html
+!vite.config.js
+!server.js

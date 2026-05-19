@@ -6,3 +6,5 @@ build/
 *.log
 .idea/
 .vscode/
+src/includeinbuild.md
+certs/

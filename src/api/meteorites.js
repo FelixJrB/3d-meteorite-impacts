@@ -13,7 +13,7 @@ export async function fetchMeteorites() {
 
   console.log(jsonData[169])
 
-  const filteredMeteorites = jsonData.filter(m => m.reclat && m.reclong)
+  const filteredMeteorites = jsonData.filter(m => m.reclat && m.reclong && m.year)
 
   return filteredMeteorites
 
