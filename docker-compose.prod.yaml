@@ -10,5 +10,3 @@ services:
   server:
     build:
       target: production
-
-  
