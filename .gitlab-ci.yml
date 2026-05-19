@@ -68,6 +68,7 @@ deploy_production_job:
      DOCKER_HOST: ssh://ubuntu@$PRODUCTION_HOST # Docker connection via SSH
   before_script: *before_script_ssh_setup # Reuse SSH setup steps.
   script:
+    - ssh ubuntu@$PRODUCTION_HOST "cd ~/project-hub && git pull origin deployment"
     - echo "Setting up environment for deployment..."
     - docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up --build -d
   only:
