@@ -10,13 +10,14 @@ export async function fetchMeteorites() {
 
   const meteoriteData = await fetch('/api/meteorites')
   const jsonData = await meteoriteData.json()
-
-  console.log(jsonData[169])
+  // cacha meteorite data i local storage, så att det inte behöver hämtas varje gång sidan laddas, och så att det finns data även när API:et inte är tillgängligt.
+  console.log(meteoriteData)
+  console.log(jsonData)
 
   const filteredMeteorites = jsonData.filter(m => m.reclat && m.reclong && m.year)
+  console.log(filteredMeteorites)
 
   return filteredMeteorites
-
 
 
   // const APIresponse = await fetch('')
