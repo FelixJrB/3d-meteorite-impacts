@@ -11,17 +11,20 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:dev": "docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up --build",
+    "docker:prod": "docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --build",
+    "docker:down": "docker compose down",
+    "test": "echo \"No tests yet\" && exit 0",
     "lint": "eslint ."
   },
   "dependencies": {
-    "bootstrap": "^5.3.8",
-    "cesium": "^1.140.0",
     "express": "^5.2.1",
     "mongoose": "^9.4.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "bootstrap": "^5.3.8",
+    "cesium": "^1.140.0",
     "@lnu/eslint-config": "^2.0.6",
     "@stylistic/eslint-plugin": "^5.10.0",
     "eslint": "^10.2.0",

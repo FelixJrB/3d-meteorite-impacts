@@ -1,0 +1,26 @@
+@startuml 3D meteorite impacts object diagram
+object aachen {
+  name = "Aachen"
+  recclass = "L5"
+  mass = "21"
+  fall = "Fell"
+  year = "1880-01-01T00:00:00"
+  reclat = 50.775
+  reclong = 6.08333
+}
+
+object nominatimResult {
+  display_name = "Aachen, Nordrhein-Westfalen, Germany"
+  city = "Aachen"
+  country = "Germany"
+}
+
+object cesiumEntity {
+  name = "Aachen"
+  position = "Cartesian3(50.775, 6.08333)"
+  description = "<h2>Aachen</h2>..."
+}
+
+aachen --> nominatimResult : reverseGeocode
+aachen --> cesiumEntity : addMarkers
+@enduml
