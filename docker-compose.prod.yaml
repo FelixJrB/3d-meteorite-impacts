@@ -5,9 +5,8 @@ services:
     environment:
       - SITE_ADDRESS=cu3049.camp.lnu.se
     volumes:
-      - ./certs/LNU_FTK_Campus_Root_CA_2025.crt:/etc/ssl/certs/LNU_FTK_Campus_Root_CA_2025.crt:ro
+      - /home/ubuntu/project-hub/Caddyfile:/etc/caddy/Caddyfile:ro
+      - /home/ubuntu/project-hub/certs/LNU_FTK_Campus_Root_CA_2025.crt:/etc/ssl/certs/LNU_FTK_Campus_Root_CA_2025.crt:ro
   server:
     build:
       target: production
-
-  
