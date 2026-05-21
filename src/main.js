@@ -4,6 +4,7 @@ import { addMarkers } from './cesiumjs/markers.js'
 import './styles/cesiumContainer.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { geocodeLocation } from './api/nominatim.js'
+import { filterMeteorites } from './utils/filterMeteorites.js'
 
 /**
  * Main function to initialize the Cesium viewer, fetch meteorite data, and set up the sidebar for filtering.
@@ -143,8 +144,7 @@ function locationFilter(viewer, data) {
 }
 
 /**
- * Filters meteorite data based on current sidebar state (mass, year, location)
- * and updates the markers on the map.
+ * Applies the selected filters to the meteorite data and updates the map markers.
  *
  * @param {import('cesium').Viewer} viewer - Cesium viewer instance.
  * @param {Array<object>} data - Array of all meteorite data.
@@ -155,22 +155,7 @@ function applyFilters(viewer, data) {
   const to = parseInt(document.getElementById('yearTo').value) || null
   const location = document.getElementById('searchlocation').value.toLowerCase().trim()
 
-  console.log('selectedSize:', selectedSize, '| from:', from, '| to:', to, '| location:', location)
-
-  const filtered = data.filter(m => {
-    const mass = parseFloat(m.mass) || 0
-    const year = m.year ? new Date(m.year).getFullYear() : null
-
-    if (selectedSize === 'small' && mass >= 250) return false
-    if (selectedSize === 'medium' && (mass < 250 || mass >= 5000)) return false
-    if (selectedSize === 'large' && (mass < 5000 || mass >= 100000)) return false
-    if (selectedSize === 'enormous' && mass < 100000) return false
-    if (from !== null && year !== null && year < from) return false
-    if (to !== null && year !== null && year > to) return false
-    if (location && !m.name.toLowerCase().includes(location)) return false
-
-    return true
-  })
+  const filtered = filterMeteorites(data, selectedSize, from, to, location)
 
   // Update the markers on the map with the filtered meteorites
   addMarkers(viewer, filtered)

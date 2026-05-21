@@ -14,7 +14,7 @@
     "docker:dev": "docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up --build",
     "docker:prod": "docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --build",
     "docker:down": "docker compose down",
-    "test": "echo \"No tests yet\" && exit 0",
+    "test": "vitest",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -23,10 +23,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "bootstrap": "^5.3.8",
-    "cesium": "^1.140.0",
     "@lnu/eslint-config": "^2.0.6",
     "@stylistic/eslint-plugin": "^5.10.0",
+    "bootstrap": "^5.3.8",
+    "cesium": "^1.140.0",
     "eslint": "^10.2.0",
     "eslint-plugin-jsdoc": "^62.9.0",
     "eslint-plugin-n": "^17.24.0",
@@ -35,6 +35,7 @@
     "eslint-plugin-sort-destructure-keys": "^3.0.0",
     "globals": "^17.5.0",
     "vite": "^8.0.8",
-    "vite-plugin-cesium": "^1.2.23"
+    "vite-plugin-cesium": "^1.2.23",
+    "vitest": "^4.1.7"
   }
 }
