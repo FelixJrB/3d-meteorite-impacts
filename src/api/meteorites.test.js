@@ -1,4 +1,5 @@
-import { expect, test } from 'vitest'
+import { vi, expect, test } from 'vitest'
+import { fetchMeteorites } from './meteorites.js'
 import { filterMeteorites } from '../utils/filterMeteorites.js'
 
 const testData = [
@@ -41,4 +42,23 @@ test('Year filter returns a meteorite within the given raange', () => {
 test('Year filter returns no meteorites if none are within the given range', () => {
   const yearFiltered = filterMeteorites(testData, 'all', 1800, 1900, '')
   expect(yearFiltered).toHaveLength(0)
+})
+
+test('fetchMeteorites filters out meteorites without coordinates or year', async () => {
+  const mockData = [
+    { reclat: '10.5', reclong: '20.3', year: '2000-01-01', name: 'Valid' },
+    { reclat: null, reclong: '20.3', year: '2000-01-01', name: 'No lat' },
+    { reclat: '10.5', reclong: null, year: '2000-01-01', name: 'No long' },
+    { reclat: '10.5', reclong: '20.3', year: null, name: 'No year' },
+  ]
+
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+    json: () => Promise.resolve(mockData),
+  }))
+
+  const result = await fetchMeteorites()
+  expect(result).toHaveLength(1)
+  expect(result[0]).toHaveProperty('name', 'Valid')
+
+  vi.unstubAllGlobals()
 })
