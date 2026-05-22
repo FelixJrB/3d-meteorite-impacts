@@ -29,6 +29,7 @@ async function startApp() {
   try {
     const allMeteorites = await fetchMeteorites()
     addMarkers(viewer, allMeteorites)
+  
     // Set up the sidebar with event listeners for filtering meteorites by mass
     meteoriteMass(viewer, allMeteorites)
     yearFilter(viewer, allMeteorites)
@@ -161,6 +162,5 @@ function applyFilters(viewer, data) {
   addMarkers(viewer, filtered)
 
 }
-
 
 startApp()
