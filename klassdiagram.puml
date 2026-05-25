@@ -1,10 +1,16 @@
 @startuml 3D meteorite impacts vizualization
+
+class Main {
+  +startApp() : Promise<void>
+  +applyFilters(viewer, data) : void
+}
+
 class MeteoriteAPI {
   +fetchMeteorites() : Promise<Array>
 }
 
 class NominatimAPI {
-  +reverseGeocode(lat: number, lon: number) : Promise<string>
+  +geocodeLocation(reclong: number, reclat: number) : Promise<object>
 }
 
 class Markers {
@@ -15,12 +21,18 @@ class Viewer {
   +initViewer() : Viewer
 }
 
+class FilterMeteorites {
+  +filterMeteorites(data, selectedSize, from, to, location) : Array
+}
+
 class Server {
   +GET /api/meteorites : Array
 }
 
+Main --> MeteoriteAPI : fetches data
+Main --> Markers : renders markers
+Main --> FilterMeteorites : filters on user input
+Main --> NominatimAPI : geocodes on marker click
 MeteoriteAPI --> Server : fetch /api/meteorites
-Markers --> MeteoriteAPI : uses meteorite data
-Markers --> NominatimAPI : reverse geocode on click
 Markers --> Viewer : adds entities
 @enduml
