@@ -1,4 +1,5 @@
 @startuml 3D meteorite impacts object diagram
+
 object aachen {
   name = "Aachen"
   recclass = "L5"
@@ -9,6 +10,17 @@ object aachen {
   reclong = 6.08333
 }
 
+object viewer {
+  timeline = false
+  animation = false
+}
+
+object dataSource {
+  name = "meteorites"
+  clustering.enabled = true
+  clustering.pixelRange = 180
+}
+
 object nominatimResult {
   display_name = "Aachen, Nordrhein-Westfalen, Germany"
   city = "Aachen"
@@ -17,10 +29,13 @@ object nominatimResult {
 
 object cesiumEntity {
   name = "Aachen"
-  position = "Cartesian3(50.775, 6.08333)"
+  position = "Cartesian3(6.08333, 50.775)"
   description = "<h2>Aachen</h2>..."
 }
 
 aachen --> nominatimResult : reverseGeocode
 aachen --> cesiumEntity : addMarkers
+viewer --> dataSource : contains
+dataSource --> aachen : entity
+
 @enduml

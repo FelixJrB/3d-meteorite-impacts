@@ -53,6 +53,7 @@ function makeClusterCircle(count) {
  * @see https://community.cesium.com/t/show-marker-on-current-location-in-cesium/15174
  * @see https://community.cesium.com/t/show-marker-on-current-location-in-cesium/15174/3
  * @see https://stackoverflow.com/questions/65788440/cesium-trigger-event-when-a-point-is-selected
+ * @see https://ux.stackexchange.com/questions/33789/multiple-map-markers-on-one-location
  * @param {Viewer} viewer - Cesium viewer, initilizes Cesium globe and scene.
  * @param {Array} meteorites - Array of meteorites to render with API from NASA and others.
  */
