@@ -99,7 +99,7 @@ export function addMarkers(viewer, meteorites) {
   meteorites.forEach(meteorite => {
     const { fall, mass, name, recclass, reclat, reclong, year } = meteorite
     const markerColor = getMassColor(mass)
-
+    const displayYear = year ? new Date(year).getFullYear() : 'Unknown'
     const grams = Number(mass)
 
     const kg = grams / 1000
@@ -128,7 +128,7 @@ export function addMarkers(viewer, meteorites) {
       description: `
         <h2>${name}</h2>
         <p><strong>Location:</strong>Fetching location...</p>
-        <p><strong>Year:</strong> ${year}</p>
+        <p><strong>Year:</strong> ${displayYear}</p>
         <p><strong>Class:</strong> ${recclass}</p>
         <p><strong>Mass:</strong> ${fromGramsToKg}</p>
         <p><strong>Fall:</strong> ${fall}</p>
