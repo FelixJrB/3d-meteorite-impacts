@@ -26,6 +26,9 @@ import { filterMeteorites } from './utils/filterMeteorites.js'
 async function startApp() {
   // Initialize Cesium viewer map
   const viewer = initViewer()
+  initResizableSidebar()
+  toggleSidebar()
+  viewer.scene.globe.enableLighting = true
   try {
     const allMeteorites = await fetchMeteorites()
     addMarkers(viewer, allMeteorites)
@@ -69,6 +72,73 @@ async function startApp() {
   }
 }
 
+/**
+ * Toggles the visibility of the sidebar and the toggle button for small screens.
+ * When the close button in the sidebar is clicked, the sidebar is hidden and the toggle button is shown.
+ * When the toggle button is clicked, the sidebar is shown and the toggle button is hidden.
+ * This function enhances the user experience on smaller screens by allowing users to easily show or hide the sidebar as needed.
+ *
+ * @returns {void}
+ * @see https://getbootstrap.com/docs/5.0/components/navbar/#toggler
+ */
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar')
+  const closeBtn = document.querySelector('.btn-close')
+  const toggleBtn = document.createElement('button')
+
+  toggleBtn.textContent = '☰'
+  toggleBtn.classList.add('sidebar-toggle') 
+  document.body.appendChild(toggleBtn)
+
+  closeBtn.addEventListener('click', () => {
+    sidebar.style.display = 'none'
+    toggleBtn.style.display = 'block'
+  })
+
+  toggleBtn.addEventListener('click', () => {
+    sidebar.style.display = ''
+    toggleBtn.style.display = 'none'
+  })
+}
+
+/**
+ * Initializes the resizable sidebar by adding event listeners for mouse actions.
+ * The sidebar can be resized by dragging its right edge, and the cursor changes to indicate when resizing is possible.
+ * The function listens for mousedown events on the sidebar to start resizing, mousemove events on 
+ * the document to adjust the width of the sidebar while resizing, and mouseup events to stop resizing.
+ * It also ensures that the sidebar width stays within a defined range (395px to 1250px) to maintain usability and prevent layout issues.
+ */
+function initResizableSidebar() {
+  const sidebar = document.querySelector('.sidebar')
+  let isResizing = false
+
+  sidebar.addEventListener('mousedown', (e) => {
+    if (e.offsetX > sidebar.offsetWidth - 10) {
+      isResizing = true
+      document.body.style.cursor = 'col-resize'
+      document.body.style.userSelect = 'none'
+    }
+  })
+
+  sidebar.addEventListener('mousemove', (e) => {
+    sidebar.style.cursor = e.offsetX > sidebar.offsetWidth - 10 ? 'col-resize' : 'default'
+  })
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isResizing) return
+    const newWidth = e.clientX
+    if (newWidth >= 395 && newWidth <= 1250) {
+      sidebar.style.width = `${newWidth}px`
+    }
+  })
+
+  document.addEventListener('mouseup', () => {
+    isResizing = false
+    document.body.style.cursor = ''
+    document.body.style.userSelect = ''
+  })
+
+}
 /**
  * Resets all filters in the sidebar to their default state and updates the markers on the map to show all meteorites.
  * This function is called when the "Reset filters" button is clicked. It unchecks all mass filter radio buttons, clears the year from/to inputs, and clears the location search input.
