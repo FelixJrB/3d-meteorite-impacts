@@ -6,6 +6,12 @@ An interactive 3D globe visualizing ~45,000 meteorite impact sites from NASA's M
 
 > Link coming soon (deploying on Render)
 
+
+## Pictures
+![Globe showing meteorite impacts worldwide](image-1.png)
+![Europe markers with clusters](image.png)
+![Billboard with information about the meteorite](image-2.png)
+
 ## Features
 
 - 3D globe with color-coded markers by meteorite mass
