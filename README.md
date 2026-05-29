@@ -1,39 +1,67 @@
-# Your Project
+# 3D Earth Meteorite Impacts
 
-This is your project's GitLab repository. You have **Maintainer** access — you can configure pipelines, manage project settings, and work freely within the repository.
+An interactive 3D globe visualizing ~45,000 meteorite impact sites from NASA's Meteorite Landings dataset. Filter by mass, year, and location — click any marker to see reverse-geocoded location data.
 
-## What lives here
+## Live demo
 
-This repository is the hub for your project. Use it to:
+> Link coming soon (deploying on Render)
 
-- Document your project in the **Wiki** (Plan → Wiki)
-- Track requirements in **Requirements Management** (Plan → Requirements)
-- Plan and track work in **Issues** and **Milestones** (Plan → Issues)
-- Set up your **CI/CD pipeline** via `.gitlab-ci.yml`
+## Features
 
-If your project has multiple components (e.g. a frontend and a backend), create separate repositories for each within your GitLab `workspace` group, and use this repository as the project hub.
+- 3D globe with color-coded markers by meteorite mass
+- Dynamic clustering based on zoom level
+- Filter by mass category, year range, and location name
+- Reverse geocoding on marker click via Nominatim (OpenStreetMap)
+- Resizable and toggleable sidebar
+- Falls back to local backup if NASA API is unavailable
 
----
+## Tech stack
 
-👉 **Replace this README with a description of your own project.**
+| Layer | Technology |
+|---|---|
+| 3D Globe | [CesiumJS](https://cesium.com/) |
+| Frontend bundler | [Vite](https://vitejs.dev/) |
+| Backend | [Express](https://expressjs.com/) |
+| UI | [Bootstrap 5](https://getbootstrap.com/) |
+| Testing | [Vitest](https://vitest.dev/) |
+| Data | [NASA Meteorite Landings API](https://data.nasa.gov/resource/gh4g-9sfh.json) |
 
-stucture / work in progress >_<
+## Getting started
 
+```bash
+git clone https://github.com/FelixJrB/3d-meteorite-impacts.git
+cd 3d-meteorite-impacts
+npm install
+```
+
+Create a `.env` file in the project root:
+
+```
+VITE_CESIUM_TOKEN=your_cesium_ion_token
+```
+
+```bash
+npm run dev      # start development server
+npm test         # run unit tests
+npm run build    # production build
+```
+
+## Folder structure
+
+```
 3D-meteorite-impacts/
 ├── index.html
-├── package.json
-├── package-lock.json
-├── vite.config.js
-├── eslint.config.js
-├── .gitignore
-├── README.md
 ├── server.js
 └── src/
     ├── main.js
     ├── api/
-    │   └── meteorites.js
+    │   ├── meteorites.js
+    │   └── nominatim.js
     ├── cesiumjs/
     │   ├── markers.js
     │   └── viewer.js
-    └── config/
-        └── mongoose.js
+    ├── styles/
+    │   └── cesiumContainer.css
+    └── utils/
+        └── filterMeteorites.js
+```
