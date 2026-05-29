@@ -1,6 +1,8 @@
 # 3D Earth Meteorite Impacts
 
-An interactive 3D globe visualizing ~45,000 meteorite impact sites from NASA's Meteorite Landings dataset. Filter by mass, year, and location — click any marker to see reverse-geocoded location data.
+An interactive 3D globe visualizing ~45,000 meteorite impact sites from NASA's Meteorite Landings dataset. 
+
+Filter by mass, year, and location — click any marker to see details including reverse-geocoded location data.
 
 ## Technologies used:
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
