@@ -95,7 +95,6 @@ export function addMarkers(viewer, meteorites) {
     cluster.billboard.verticalOrigin = VerticalOrigin.CENTER
   })
 
-  console.log(meteorites)
   meteorites.forEach(meteorite => {
     const { fall, mass, name, recclass, reclat, reclong, year } = meteorite
     const markerColor = getMassColor(mass)
